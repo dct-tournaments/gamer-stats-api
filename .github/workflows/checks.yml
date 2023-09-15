@@ -1,0 +1,49 @@
+name: QA
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+      types: [opened, synchronize, reopened]
+
+env:
+  GO_PROJECT: github.com/dct-tournaments/gamer-stats-api
+  GO_VERSION: 1.20.1
+  PYTHON_VERSION: '3.9'
+
+jobs:
+  precommit:
+    name: Precommit Checks
+    runs-on: ubuntu-latest
+    steps:
+      # Doc: https://github.com/marketplace/actions/checkout
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Doc: https://github.com/actions/setup-go
+      - name: Set up Go
+        uses: actions/setup-go@v4.1.0
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      # Doc: https://github.com/actions/setup-python
+      - name: Set up Python
+        uses: actions/setup-python@v4.7.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Configure private modules
+        env:
+          TOKEN: ${{ secrets.VERSE_REPO_PAT }}
+        run: git config --global url."https://benlancinot:${TOKEN}@github.com".insteadOf "https://github.com"
+
+      - name: Run Precommit
+        run: |
+          go install github.com/segmentio/golines@latest
+          pip install pre-commit
+          pre-commit run check-added-large-files --all-files
+          pre-commit run check-merge-conflict --all-files
+          pre-commit run check-yaml --all-files
+          pre-commit run detect-private-key --all-files
+          pre-commit run end-of-file-fixer --all-files
+          pre-commit run my-cmd --all-files

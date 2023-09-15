@@ -1,0 +1,28 @@
+# This config file is only meant for local pre-commit execution.
+# If you want the checks to be applied in the CI, please add them to the action workflow.
+# This is done this way because golangci-lint is not run with pre-commit in the ci.
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev:  v4.4.0
+    hooks:
+    - id: check-added-large-files
+    - id: check-merge-conflict
+    - id: check-yaml
+      args: [--allow-multiple-documents]
+    - id: detect-aws-credentials
+    - id: detect-private-key
+    - id: end-of-file-fixer
+    - id: no-commit-to-branch
+      args: ["-b", "main", "-b", "dev"]
+-   repo: https://github.com/tekwizely/pre-commit-golang
+    rev: v1.0.0-rc.1
+    hooks:
+      - id: my-cmd
+        name: golines
+        alias: golines
+        args: [golines, '-m', '120', '-w', '--']
+-   repo: https://github.com/golangci/golangci-lint
+    rev: v1.54.2
+    hooks:
+    - id: golangci-lint
+    

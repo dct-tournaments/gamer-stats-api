@@ -18,7 +18,7 @@ Build the docker image with the command:
 #### Step 2:
 
 Run the image with the command:
-`docker run -p8080:8080 gamer-stats-api`
+`docker run -p 8080:8080 gamer-stats-api`
 
 #### Step 3:
 

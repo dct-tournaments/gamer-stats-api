@@ -1,13 +1,38 @@
 # gamer-stats-api
 The (wannabe) game stats api. It allows you to get easily the stats for different games.
 
-## Current support games:
-- ??
-
-If you want a new game to be supported, please open an issue. 
-
 ## API documentation:
-TODO
+
+### v0.0.1
+
+#### Supported games and events
+- League of Legends
+  - kills
+  - deaths
+  - assists
+
+ps: if you want a new game or event, open a new issue and we will try to add it.
+
+#### Response protocol:
+The response protocol is the same for all supported the games. The response is a JSON object with the following structure:
+
+```json
+{
+    "games": {
+        "official_game_name": [
+            {"in_game_event_name": total_count_of_events_for_the_player},
+            {"in_game_event_name": total_count_of_events_for_the_player},
+            {"in_game_event_name": total_count_of_events_for_the_player}
+        ],
+        "official_game_name": [
+            {"in_game_event_name": total_count_of_events_for_the_player},
+            {"in_game_event_name": total_count_of_events_for_the_player},
+            {"in_game_event_name": total_count_of_events_for_the_player}
+        ]
+    },
+    "query_executed_at": "timestamp of the query"
+}
+```
 
 ## Contributor guide:
 Do you want to contribute to this project? Great! This is how you can contribute:

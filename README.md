@@ -17,19 +17,12 @@ ps: if you want a new game or event, open a new issue and we will try to add it.
 The response protocol is the same for all supported the games. The response is a JSON object with the following structure:
 
 ```json
-{
-    "games": {
-        "official_game_name": [
+{  
+    "stats": [
             {"in_game_event_name": total_count_of_events_for_the_player},
             {"in_game_event_name": total_count_of_events_for_the_player},
             {"in_game_event_name": total_count_of_events_for_the_player}
-        ],
-        "official_game_name": [
-            {"in_game_event_name": total_count_of_events_for_the_player},
-            {"in_game_event_name": total_count_of_events_for_the_player},
-            {"in_game_event_name": total_count_of_events_for_the_player}
-        ]
-    },
+    ],
     "query_executed_at": "timestamp of the query"
 }
 ```

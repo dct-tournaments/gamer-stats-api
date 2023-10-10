@@ -52,7 +52,7 @@ Build the docker image with the command:
 #### Step 2:
 
 Run the image with the command:
-`docker run -p 8080:8080 gamer-stats-api`
+`docker run -e LEAGUE_OF_LEGENDS_API_KEY="your_lol_api_key" -p 8080:8080 gamer-stats-api`
 
 #### Step 3:
 

@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 
-	"github.com/dct-tournaments/gamer-stats-api/pkg/leagueoflegends"
+	"github.com/dct-tournaments/gamer-stats-api/internal/leagueoflegends"
+	"github.com/dct-tournaments/gamer-stats-api/internal/rest"
+	lolAPI "github.com/dct-tournaments/gamer-stats-api/pkg/leagueoflegends"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,16 +18,18 @@ func main() {
 		return
 	}
 
-	// services
-	_ = leagueoflegends.NewService(config.LeagueOfLegends)
+	// external API services
+	lolAPIService := lolAPI.NewService(config.LeagueOfLegends)
 
-	r := gin.Default()
+	// internal services
+	lolservice := leagueoflegends.NewService(lolAPIService)
 
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "healthy",
-		})
-	})
+	// rest handlers
+	lolRestHandler := rest.NewHandler(lolservice)
 
-	r.Run()
+	router := gin.Default()
+
+	lolRestHandler.Register(router)
+
+	router.Run(":8080")
 }

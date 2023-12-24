@@ -23,7 +23,11 @@ type Summoner struct {
 	SummonerLevel int64  `json:"summonerLevel"`
 }
 
-func (s service) GetSummonerByName(ctx context.Context, platformRouting PlatformRouting, username string) (*Summoner, error) {
+func (s service) GetSummonerByName(
+	ctx context.Context,
+	platformRouting PlatformRouting,
+	username string,
+) (*Summoner, error) {
 	reqPath := fmt.Sprintf(summonerV4Path, platformRouting, username)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, reqPath, nil)

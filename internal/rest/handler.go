@@ -14,7 +14,12 @@ const (
 )
 
 type LeagueOfLegendsService interface {
-	GetPlayerStats(ctx context.Context, region string, name string, startAt *int64) (*leagueoflegends.PlayerStats, error)
+	GetPlayerStats(
+		ctx context.Context,
+		region string,
+		name string,
+		startAt *int64,
+	) (*leagueoflegends.PlayerStats, error)
 }
 
 // Handler defines the REST API handlers.

@@ -10,7 +10,11 @@ import (
 )
 
 type LeagueOfLegendsAPIService interface {
-	GetSummonerByName(ctx context.Context, platformRouting leagueoflegends.PlatformRouting, username string) (*leagueoflegends.Summoner, error)
+	GetSummonerByName(
+		ctx context.Context,
+		platformRouting leagueoflegends.PlatformRouting,
+		username string,
+	) (*leagueoflegends.Summoner, error)
 	GetMatchesByPUUID(
 		ctx context.Context,
 		platformRouting leagueoflegends.PlatformRouting,
@@ -20,7 +24,11 @@ type LeagueOfLegendsAPIService interface {
 		start *int,
 		count *int,
 	) ([]string, error)
-	GetMatchByID(ctx context.Context, platformRouting leagueoflegends.PlatformRouting, matchID string) (*leagueoflegends.Match, error)
+	GetMatchByID(
+		ctx context.Context,
+		platformRouting leagueoflegends.PlatformRouting,
+		matchID string,
+	) (*leagueoflegends.Match, error)
 }
 
 type service struct {
@@ -46,13 +54,26 @@ func (s *service) getPlayerPUUIDByName(ctx context.Context, region string, name 
 	return summoner.Puuid, nil
 }
 
-func (s *service) GetPlayerStats(ctx context.Context, region string, name string, startAt *int64) (*PlayerStats, error) {
+func (s *service) GetPlayerStats(
+	ctx context.Context,
+	region string,
+	name string,
+	startAt *int64,
+) (*PlayerStats, error) {
 	puuid, err := s.getPlayerPUUIDByName(ctx, region, name)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get player PUUID by name")
 	}
 
-	matchIDs, err := s.leagueOfLegendsAPIService.GetMatchesByPUUID(ctx, leagueoflegends.PlatformRouting(region), puuid, startAt, nil, nil, nil)
+	matchIDs, err := s.leagueOfLegendsAPIService.GetMatchesByPUUID(
+		ctx,
+		leagueoflegends.PlatformRouting(region),
+		puuid,
+		startAt,
+		nil,
+		nil,
+		nil,
+	)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get player matches by PUUID")
 	}

@@ -5,15 +5,8 @@ import (
 	"time"
 )
 
-type PlatformRouting string
-type RegionalRouting string
-
 const (
 	timeout = 30 * time.Second
-
-	EUW1PlatformRouting PlatformRouting = "euw1"
-
-	EuropeRegionalRouting RegionalRouting = "europe"
 )
 
 type Config struct {

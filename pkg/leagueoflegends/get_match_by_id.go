@@ -26,7 +26,9 @@ type Participants struct {
 	PUUID string `json:"puuid"`
 }
 
-func (s service) GetMatchByID(ctx context.Context, region RegionalRouting, matchID string) (*Match, error) {
+func (s service) GetMatchByID(ctx context.Context, platformRouting PlatformRouting, matchID string) (*Match, error) {
+	region := s.fromPlatformRoutingToRegionalRouting(platformRouting)
+
 	baseURL := fmt.Sprintf(getMatchByIDPath, region, matchID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, baseURL, nil)

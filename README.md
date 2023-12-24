@@ -18,11 +18,11 @@ The response protocol is the same for all supported the games. The response is a
 
 ```json
 {  
-    "stats": [
-            {"in_game_event_name": total_count_of_events_for_the_player},
-            {"in_game_event_name": total_count_of_events_for_the_player},
-            {"in_game_event_name": total_count_of_events_for_the_player}
-    ],
+    "stats": {
+        "in_game_event_name": total_count_of_events_for_the_player,
+        "in_game_event_name": total_count_of_events_for_the_player,
+        "in_game_event_name": total_count_of_events_for_the_player
+    },
     "query_executed_at": "timestamp of the query"
 }
 ```

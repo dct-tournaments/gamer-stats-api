@@ -16,13 +16,15 @@ const (
 
 func (s service) GetMatchesByPUUID(
 	ctx context.Context,
-	region RegionalRouting,
+	platformRouting PlatformRouting,
 	puuid string,
 	startTime *int64,
 	endTime *int64,
 	start *int,
 	count *int,
 ) ([]string, error) {
+	region := s.fromPlatformRoutingToRegionalRouting(platformRouting)
+
 	baseURL := fmt.Sprintf(getMatchesByPUUIDPath, region, puuid)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, baseURL, nil)

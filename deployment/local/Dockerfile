@@ -12,13 +12,14 @@ RUN go mod download
 COPY . ./
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o bin/gamer-stats-api cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o bin/gamer-stats-api ./cmd/
 
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
 EXPOSE 8080
 
 RUN cd bin
-RUN ls
+
+ENV LEAGUE_OF_LEGENDS_API_KEY=""
 
 # Run
 CMD ["./bin/gamer-stats-api"]

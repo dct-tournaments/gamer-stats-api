@@ -8,8 +8,9 @@ import (
 )
 
 type Stats struct {
-	Kills  int `json:"kills"`
-	Deaths int `json:"deaths"`
+	Kills   int `json:"kills"`
+	Deaths  int `json:"deaths"`
+	Assists int `json:"assists"`
 }
 
 type GetLeagueOfLegendsStatsResponse struct {
@@ -63,7 +64,7 @@ func (h *handler) GetLeagueOfLegendsStats(c *gin.Context) {
 	}
 
 	response := GetLeagueOfLegendsStatsResponse{
-		Stats:           Stats{Kills: stats.KillCount, Deaths: stats.DeathCount},
+		Stats:           Stats{Kills: stats.KillCount, Deaths: stats.DeathCount, Assists: stats.AssistCount},
 		QueryExecutedAt: time.Now().Unix(),
 	}
 

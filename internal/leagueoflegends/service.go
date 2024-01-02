@@ -80,6 +80,7 @@ func (s *service) GetPlayerStats(
 
 	playerKillsCount := 0
 	playerDeathCount := 0
+	playerAssistCount := 0
 
 	for _, id := range matchIDs {
 		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, leagueoflegends.PlatformRouting(region), id)
@@ -91,9 +92,10 @@ func (s *service) GetPlayerStats(
 			if strings.EqualFold(player.PUUID, puuid) {
 				playerKillsCount += player.Kills
 				playerDeathCount += player.Deaths
+				playerAssistCount += player.Assists
 			}
 		}
 	}
 
-	return &PlayerStats{KillCount: playerKillsCount, DeathCount: playerDeathCount}, nil
+	return &PlayerStats{KillCount: playerKillsCount, DeathCount: playerDeathCount, AssistCount: playerAssistCount}, nil
 }

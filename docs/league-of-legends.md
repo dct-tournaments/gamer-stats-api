@@ -19,9 +19,10 @@ curl -X GET "http://localhost:8080/stats-api/v0/league-of-legends?username=kahno
 #### Response
 ```json
 {
-    stats: {
-        kills: 53
+    "stats": {
+        "kills": 53,
+        "deaths": 119
     },
-    query_executed_at: 1703425687
+    "query_executed_at": 1703425687
 }
 ```

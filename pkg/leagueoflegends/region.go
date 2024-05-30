@@ -4,7 +4,7 @@ type PlatformRouting string
 type RegionalRouting string
 
 const (
-	EUW1PlatformRouting PlatformRouting = "euw1"
+	EUW1PlatformRouting PlatformRouting = "EUW1"
 
 	EuropeRegionalRouting RegionalRouting = "europe"
 )

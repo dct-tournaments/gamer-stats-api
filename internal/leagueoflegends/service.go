@@ -29,6 +29,12 @@ type LeagueOfLegendsAPIService interface {
 		platformRouting leagueoflegends.PlatformRouting,
 		matchID string,
 	) (*leagueoflegends.Match, error)
+	GetAccountByRiotID(
+		ctx context.Context,
+		gameName string,
+		tagLine string,
+		regionalRounting leagueoflegends.PlatformRouting,
+	) (*leagueoflegends.RiotAccount, error)
 }
 
 type service struct {
@@ -36,7 +42,13 @@ type service struct {
 }
 
 type Service interface {
-	GetPlayerStats(ctx context.Context, region string, name string, startAt *int64) (*PlayerStats, error)
+	GetPlayerStats(
+		ctx context.Context,
+		name string,
+		tagLine string,
+		region string,
+		startAt *int64,
+	) (*PlayerStats, error)
 }
 
 func NewService(lolservice LeagueOfLegendsAPIService) Service {
@@ -54,15 +66,35 @@ func (s *service) getPlayerPUUIDByName(ctx context.Context, region string, name 
 	return summoner.Puuid, nil
 }
 
+func (s *service) getPlayerPUUIDByRiotID(
+	ctx context.Context,
+	name string,
+	tagLine string,
+	region string,
+) (string, error) {
+	account, err := s.leagueOfLegendsAPIService.GetAccountByRiotID(
+		ctx,
+		name,
+		tagLine,
+		leagueoflegends.PlatformRouting(region),
+	)
+	if err != nil {
+		return "", err
+	}
+
+	return account.Puuid, nil
+}
+
 func (s *service) GetPlayerStats(
 	ctx context.Context,
 	region string,
 	name string,
+	tagLine string,
 	startAt *int64,
 ) (*PlayerStats, error) {
-	puuid, err := s.getPlayerPUUIDByName(ctx, region, name)
+	puuid, err := s.getPlayerPUUIDByRiotID(ctx, name, tagLine, region)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get player PUUID by name")
+		return nil, errors.Wrap(err, "failed to get player PUUID by riot id")
 	}
 
 	matchIDs, err := s.leagueOfLegendsAPIService.GetMatchesByPUUID(

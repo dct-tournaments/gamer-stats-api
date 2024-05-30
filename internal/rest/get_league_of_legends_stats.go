@@ -2,6 +2,7 @@ package rest
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -24,8 +25,9 @@ type GetLeagueOfLegendsStatsResponse struct {
 // @Tags         stats-api/v0
 // @Accept       json
 // @Produce      json
-// @Param        username	query   string  true  "league of legends username"
-// @Param        start_time	query   string  false "start time in RFC3339 format"
+// @query        username	query   string  true  "league of legends username"
+// @query		 tagline	query   string  true "league of legends tagline"
+// @Param        start_time	query   string  false "start time epoch format"
 // @Param        region		query   string  true  "league of legends region: br1,eun1,euw1,jp1,kr,la1,la2,na1,oc1,ph2,ru,sg2,th2,tr1,tw2,vn2"
 // @Success      200  {object}     GetLeagueOfLegendsStatsResponse
 // @Failure      400
@@ -33,6 +35,7 @@ type GetLeagueOfLegendsStatsResponse struct {
 // @Router       /stats-api/v0/league-of-legends [get].
 func (h *handler) GetLeagueOfLegendsStats(c *gin.Context) {
 	username := c.Query("username")
+	tagline := c.Query("tagline")
 	startTimeStr := c.Query("start_time")
 	region := c.Query("region")
 
@@ -45,18 +48,18 @@ func (h *handler) GetLeagueOfLegendsStats(c *gin.Context) {
 	var startTimePtr *int64
 
 	if startTimeStr != "" {
-		startTime, err := time.Parse(time.RFC3339, startTimeStr)
+		// convert a string to int64
+		startTime, err := strconv.ParseInt(startTimeStr, 10, 64)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid start time"})
 
 			return
 		}
 
-		startTimeInt := startTime.Unix()
-		startTimePtr = &startTimeInt
+		startTimePtr = &startTime
 	}
 
-	stats, err := h.leagueOfLegendsService.GetPlayerStats(c.Request.Context(), region, username, startTimePtr)
+	stats, err := h.leagueOfLegendsService.GetPlayerStats(c.Request.Context(), username, tagline, region, startTimePtr)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 

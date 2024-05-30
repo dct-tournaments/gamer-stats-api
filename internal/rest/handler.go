@@ -16,8 +16,9 @@ const (
 type LeagueOfLegendsService interface {
 	GetPlayerStats(
 		ctx context.Context,
-		region string,
 		name string,
+		tagLine string,
+		region string,
 		startAt *int64,
 	) (*leagueoflegends.PlayerStats, error)
 }

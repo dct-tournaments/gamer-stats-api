@@ -1,0 +1,17 @@
+version: '3'
+silent: false
+
+tasks:
+  default:
+    desc: Lists available commands
+    cmds:
+      - task -l
+  mocks:
+    desc: Generate mocks
+    aliases: [m]
+    precondition:
+      - sh: command - v mockgen
+    cmds:
+      - echo "🐀 Clean mocks folder and re-generate mocks"
+      - rm -rf pkg/mocks/
+      - go generate ./...

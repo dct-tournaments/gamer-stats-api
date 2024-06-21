@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/dct-tournaments/gamer-stats-api/internal/leagueoflegends"
+	pleagueoflegends "github.com/dct-tournaments/gamer-stats-api/pkg/leagueoflegends"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,10 +17,11 @@ const (
 type LeagueOfLegendsService interface {
 	GetPlayerStats(
 		ctx context.Context,
+		region string,
 		name string,
 		tagLine string,
-		region string,
 		startAt *int64,
+		queueType *pleagueoflegends.QueueID,
 	) (*leagueoflegends.PlayerStats, error)
 }
 

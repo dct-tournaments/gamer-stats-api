@@ -9,6 +9,7 @@ import (
 	"github.com/dct-tournaments/gamer-stats-api/pkg/leagueoflegends"
 )
 
+//go:generate mockgen -source=../../internal/leagueoflegends/service.go -destination=../../pkg/mocks/leagueoflegends.go -package=mocks
 type LeagueOfLegendsAPIService interface {
 	GetSummonerByName(
 		ctx context.Context,
@@ -44,9 +45,9 @@ type service struct {
 type Service interface {
 	GetPlayerStats(
 		ctx context.Context,
+		region string,
 		name string,
 		tagLine string,
-		region string,
 		startAt *int64,
 		queueType *leagueoflegends.QueueID,
 	) (*PlayerStats, error)

@@ -48,6 +48,7 @@ type Service interface {
 		tagLine string,
 		region string,
 		startAt *int64,
+		queueType *leagueoflegends.QueueID,
 	) (*PlayerStats, error)
 }
 
@@ -55,15 +56,6 @@ func NewService(lolservice LeagueOfLegendsAPIService) Service {
 	return &service{
 		leagueOfLegendsAPIService: lolservice,
 	}
-}
-
-func (s *service) getPlayerPUUIDByName(ctx context.Context, region string, name string) (string, error) {
-	summoner, err := s.leagueOfLegendsAPIService.GetSummonerByName(ctx, leagueoflegends.PlatformRouting(region), name)
-	if err != nil {
-		return "", err
-	}
-
-	return summoner.Puuid, nil
 }
 
 func (s *service) getPlayerPUUIDByRiotID(
@@ -91,6 +83,7 @@ func (s *service) GetPlayerStats(
 	name string,
 	tagLine string,
 	startAt *int64,
+	queueType *leagueoflegends.QueueID,
 ) (*PlayerStats, error) {
 	puuid, err := s.getPlayerPUUIDByRiotID(ctx, name, tagLine, region)
 	if err != nil {
@@ -118,6 +111,10 @@ func (s *service) GetPlayerStats(
 		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, leagueoflegends.PlatformRouting(region), id)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get match by ID")
+		}
+
+		if queueType != nil && match.Info.QueueID != *queueType {
+			continue
 		}
 
 		for _, player := range match.Info.Participants {

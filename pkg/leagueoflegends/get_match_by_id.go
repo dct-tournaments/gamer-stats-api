@@ -9,8 +9,11 @@ import (
 	"strings"
 )
 
+type QueueID int
+
 const (
-	getMatchByIDPath = "https://%s.api.riotgames.com/lol/match/v5/matches/%s"
+	getMatchByIDPath         = "https://%s.api.riotgames.com/lol/match/v5/matches/%s"
+	RankedQueueID    QueueID = 420
 )
 
 type Match struct {
@@ -19,6 +22,7 @@ type Match struct {
 
 type Info struct {
 	Participants []Participants `json:"participants"`
+	QueueID      QueueID        `json:"queueId"`
 }
 
 type Participants struct {

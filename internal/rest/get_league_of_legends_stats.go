@@ -100,9 +100,9 @@ func toQueueTypeParamToQueueID(queueType QueueType) *leagueoflegends.QueueID {
 
 		return &rankedQueueID
 	case Aram:
-		rankedQueueID := leagueoflegends.RankedQueueID
+		aramQueueID := leagueoflegends.AramQueueID
 
-		return &rankedQueueID
+		return &aramQueueID
 	case AllQueueType:
 		fallthrough
 	default:

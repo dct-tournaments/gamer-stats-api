@@ -13,7 +13,7 @@ type QueueType string
 const (
 	RankedQueueType QueueType = "ranked"
 	AllQueueType    QueueType = "all"
-	Aram            QueueType = "aram"
+	AramQueueType   QueueType = "aram"
 )
 
 type Stats struct {
@@ -99,7 +99,7 @@ func toQueueTypeParamToQueueID(queueType QueueType) *leagueoflegends.QueueID {
 		rankedQueueID := leagueoflegends.RankedQueueID
 
 		return &rankedQueueID
-	case Aram:
+	case AramQueueType:
 		aramQueueID := leagueoflegends.AramQueueID
 
 		return &aramQueueID

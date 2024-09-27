@@ -1,12 +1,11 @@
 package rest
 
 import (
+	"github.com/dct-tournaments/gamer-stats-api/pkg/leagueoflegends"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
-
-	"github.com/dct-tournaments/gamer-stats-api/pkg/leagueoflegends"
-	"github.com/gin-gonic/gin"
 )
 
 type QueueType string
@@ -14,6 +13,7 @@ type QueueType string
 const (
 	RankedQueueType QueueType = "ranked"
 	AllQueueType    QueueType = "all"
+	Aram            QueueType = "aram"
 )
 
 type Stats struct {
@@ -96,6 +96,10 @@ func (h *handler) GetLeagueOfLegendsStats(c *gin.Context) {
 func toQueueTypeParamToQueueID(queueType QueueType) *leagueoflegends.QueueID {
 	switch queueType {
 	case RankedQueueType:
+		rankedQueueID := leagueoflegends.RankedQueueID
+
+		return &rankedQueueID
+	case Aram:
 		rankedQueueID := leagueoflegends.RankedQueueID
 
 		return &rankedQueueID

@@ -23,6 +23,7 @@ The response protocol is the same for all supported the games. The response is a
         "in_game_event_name": total_count_of_events_for_the_player,
         "in_game_event_name": total_count_of_events_for_the_player
     },
+  
     "query_executed_at": "timestamp of the query"
 }
 ```
@@ -47,12 +48,17 @@ If you want to contribute to the codebase, follow those steps to install the pro
 
 Build the docker image with the command:
 
-`docker build -f deployment/local/Dockerfile --tag gamer-stats-api .`
+```bash
+docker build -f deployment/local/Dockerfile --tag gamer-stats-api .
+```
 
 #### Step 2:
 
 Run the image with the command:
-`docker run -e LEAGUE_OF_LEGENDS_API_KEY="your_lol_api_key" -p 8080:8080 gamer-stats-api`
+
+```bash
+docker run -e LEAGUE_OF_LEGENDS_API_KEY="your_lol_api_key" -p 8080:8080 gamer-stats-api
+```
 
 #### Step 3:
 

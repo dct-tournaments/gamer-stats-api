@@ -15,6 +15,7 @@ const (
 	getMatchByIDPath         = "https://%s.api.riotgames.com/lol/match/v5/matches/%s"
 	RankedQueueID    QueueID = 420
 	FlexQueueID      QueueID = 440
+	AramQueueID      QueueID = 450
 )
 
 type Match struct {

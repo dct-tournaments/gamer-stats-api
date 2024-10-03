@@ -29,14 +29,12 @@ const (
 
 func (s service) fromPlatformRoutingToRegionalRouting(platformRouting PlatformRouting) RegionalRouting {
 	switch platformRouting {
-	case BR1PlatformRouting:
+	case BR1PlatformRouting, LA1PlatformRouting, LA2PlatformRouting, NA1PlatformRouting:
 		return AmericasRegionalRouting
 	case EUW1PlatformRouting, EUN1PlatformRouting, TR1PlatformRouting, RU1PlatformRouting:
 		return EuropeRegionalRouting
 	case JP1PlatformRouting, KR1PlatformRouting, TW2PlatformRouting:
 		return AsiaRegionalRouting
-	case LA1PlatformRouting, LA2PlatformRouting, NA1PlatformRouting:
-		return AmericasRegionalRouting
 	case OC1PlatformRouting, PH2PlatformRouting, SG2PlatformRouting, TH2PlatformRouting, VN2PlatformRouting:
 		return SeaRegionalRouting
 	default:

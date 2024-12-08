@@ -51,6 +51,13 @@ type Service interface {
 		startAt *int64,
 		queueType *leagueoflegends.QueueID,
 	) (*PlayerStats, error)
+	GetPlayerStatsByPUUID(
+		ctx context.Context,
+		region string,
+		puuid string,
+		startAt *int64,
+		queueType *leagueoflegends.QueueID,
+	) (*PlayerStats, error)
 }
 
 func NewService(lolservice LeagueOfLegendsAPIService) Service {
@@ -91,6 +98,52 @@ func (s *service) GetPlayerStats(
 		return nil, errors.Wrap(err, "failed to get player PUUID by riot id")
 	}
 
+	matchIDs, err := s.leagueOfLegendsAPIService.GetMatchesByPUUID(
+		ctx,
+		leagueoflegends.PlatformRouting(region),
+		puuid,
+		startAt,
+		nil,
+		nil,
+		nil,
+	)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get player matches by PUUID")
+	}
+
+	playerKillsCount := 0
+	playerDeathCount := 0
+	playerAssistCount := 0
+
+	for _, id := range matchIDs {
+		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, leagueoflegends.PlatformRouting(region), id)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to get match by ID")
+		}
+
+		if queueType != nil && match.Info.QueueID != *queueType {
+			continue
+		}
+
+		for _, player := range match.Info.Participants {
+			if strings.EqualFold(player.PUUID, puuid) {
+				playerKillsCount += player.Kills
+				playerDeathCount += player.Deaths
+				playerAssistCount += player.Assists
+			}
+		}
+	}
+
+	return &PlayerStats{KillCount: playerKillsCount, DeathCount: playerDeathCount, AssistCount: playerAssistCount}, nil
+}
+
+func (s *service) GetPlayerStatsByPUUID(
+	ctx context.Context,
+	region string,
+	puuid string,
+	startAt *int64,
+	queueType *leagueoflegends.QueueID,
+) (*PlayerStats, error) {
 	matchIDs, err := s.leagueOfLegendsAPIService.GetMatchesByPUUID(
 		ctx,
 		leagueoflegends.PlatformRouting(region),

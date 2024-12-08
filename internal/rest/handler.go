@@ -10,6 +10,7 @@ import (
 
 const (
 	statsV0Group = "/stats-api/v0"
+	statsV1Group = "/stats-api/v1"
 
 	leagueOfLegendsStatsPath = "/league-of-legends"
 )
@@ -20,6 +21,13 @@ type LeagueOfLegendsService interface {
 		region string,
 		name string,
 		tagLine string,
+		startAt *int64,
+		queueType *pleagueoflegends.QueueID,
+	) (*leagueoflegends.PlayerStats, error)
+	GetPlayerStatsByPUUID(
+		ctx context.Context,
+		region string,
+		puuid string,
 		startAt *int64,
 		queueType *pleagueoflegends.QueueID,
 	) (*leagueoflegends.PlayerStats, error)
@@ -39,6 +47,8 @@ func NewHandler(lolservice LeagueOfLegendsService) *handler {
 
 func (h *handler) Register(router *gin.Engine) {
 	v0 := router.Group(statsV0Group)
+	v1 := router.Group(statsV1Group)
 
 	v0.GET(leagueOfLegendsStatsPath, h.GetLeagueOfLegendsStats)
+	v1.GET(leagueOfLegendsStatsPath, h.GetLeagueOfLegendsStatsV1)
 }

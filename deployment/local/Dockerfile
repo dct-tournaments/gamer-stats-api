@@ -12,7 +12,8 @@ RUN go mod download
 COPY . ./
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o bin/gamer-stats-api ./cmd/
+ENV GOCACHE=/root/.cache/go-build
+RUN --mount=type=cache,target="/root/.cache/go-build" CGO_ENABLED=0 GOOS=linux go build -o bin/gamer-stats-api -x ./cmd/
 
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
 EXPOSE 8080

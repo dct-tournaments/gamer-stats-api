@@ -1,11 +1,12 @@
 package rest
 
 import (
-	"github.com/dct-tournaments/gamer-stats-api/pkg/leagueoflegends"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/dct-tournaments/gamer-stats-api/pkg/leagueoflegends"
+	"github.com/gin-gonic/gin"
 )
 
 type QueueType string

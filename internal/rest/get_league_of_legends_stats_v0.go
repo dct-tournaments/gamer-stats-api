@@ -18,9 +18,10 @@ const (
 )
 
 type Stats struct {
-	Kills   int `json:"kills"`
-	Deaths  int `json:"deaths"`
-	Assists int `json:"assists"`
+	Kills       int `json:"kills"`
+	Deaths      int `json:"deaths"`
+	Assists     int `json:"assists"`
+	WardsPlaced int `json:"wards_placed"`
 }
 
 type GetLeagueOfLegendsStatsResponse struct {
@@ -72,7 +73,7 @@ func (h *handler) GetLeagueOfLegendsStats(c *gin.Context) {
 
 	queueID := toQueueTypeParamToQueueID(QueueType(queueTypeStr))
 
-	stats, err := h.leagueOfLegendsService.GetPlayerStats(
+	stats, err := h.leagueOfLegendsService.GetPlayerStatsByNameAndTagLine(
 		c.Request.Context(),
 		region,
 		username,
@@ -87,7 +88,12 @@ func (h *handler) GetLeagueOfLegendsStats(c *gin.Context) {
 	}
 
 	response := GetLeagueOfLegendsStatsResponse{
-		Stats:           Stats{Kills: stats.KillCount, Deaths: stats.DeathCount, Assists: stats.AssistCount},
+		Stats: Stats{
+			Kills:       stats.KillCount,
+			Deaths:      stats.DeathCount,
+			Assists:     stats.AssistCount,
+			WardsPlaced: stats.WardsPlaced,
+		},
 		QueryExecutedAt: time.Now().Unix(),
 	}
 

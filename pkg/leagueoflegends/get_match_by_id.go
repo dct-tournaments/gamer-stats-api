@@ -28,10 +28,11 @@ type Info struct {
 }
 
 type Participants struct {
-	Kills   int    `json:"kills"`
-	Deaths  int    `json:"deaths"`
-	Assists int    `json:"assists"`
-	PUUID   string `json:"puuid"`
+	Kills       int    `json:"kills"`
+	Deaths      int    `json:"deaths"`
+	Assists     int    `json:"assists"`
+	PUUID       string `json:"puuid"`
+	WardsPlaced int    `json:"wardsPlaced"`
 }
 
 func (s service) GetMatchByID(ctx context.Context, platformRouting PlatformRouting, matchID string) (*Match, error) {

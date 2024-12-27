@@ -64,7 +64,12 @@ func (h *handler) GetLeagueOfLegendsStatsV1(c *gin.Context) {
 	}
 
 	response := GetLeagueOfLegendsStatsResponse{
-		Stats:           Stats{Kills: stats.KillCount, Deaths: stats.DeathCount, Assists: stats.AssistCount},
+		Stats: Stats{
+			Kills:       stats.KillCount,
+			Deaths:      stats.DeathCount,
+			Assists:     stats.AssistCount,
+			WardsPlaced: stats.WardsPlaced,
+		},
 		QueryExecutedAt: time.Now().Unix(),
 	}
 

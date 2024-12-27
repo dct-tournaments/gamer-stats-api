@@ -114,6 +114,7 @@ func (s *service) GetPlayerStats(
 	playerKillsCount := 0
 	playerDeathCount := 0
 	playerAssistCount := 0
+	playerWardsPlacedCount := 0
 
 	for _, id := range matchIDs {
 		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, leagueoflegends.PlatformRouting(region), id)
@@ -130,11 +131,17 @@ func (s *service) GetPlayerStats(
 				playerKillsCount += player.Kills
 				playerDeathCount += player.Deaths
 				playerAssistCount += player.Assists
+				playerWardsPlacedCount += player.WardsPlaced
 			}
 		}
 	}
 
-	return &PlayerStats{KillCount: playerKillsCount, DeathCount: playerDeathCount, AssistCount: playerAssistCount}, nil
+	return &PlayerStats{
+		KillCount:   playerKillsCount,
+		DeathCount:  playerDeathCount,
+		AssistCount: playerAssistCount,
+		WardsPlaced: playerWardsPlacedCount,
+	}, nil
 }
 
 func (s *service) GetPlayerStatsByPUUID(
@@ -160,6 +167,7 @@ func (s *service) GetPlayerStatsByPUUID(
 	playerKillsCount := 0
 	playerDeathCount := 0
 	playerAssistCount := 0
+	playerWardsPlacedCount := 0
 
 	for _, id := range matchIDs {
 		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, leagueoflegends.PlatformRouting(region), id)
@@ -176,9 +184,15 @@ func (s *service) GetPlayerStatsByPUUID(
 				playerKillsCount += player.Kills
 				playerDeathCount += player.Deaths
 				playerAssistCount += player.Assists
+				playerWardsPlacedCount += player.WardsPlaced
 			}
 		}
 	}
 
-	return &PlayerStats{KillCount: playerKillsCount, DeathCount: playerDeathCount, AssistCount: playerAssistCount}, nil
+	return &PlayerStats{
+		KillCount:   playerKillsCount,
+		DeathCount:  playerDeathCount,
+		AssistCount: playerAssistCount,
+		WardsPlaced: playerWardsPlacedCount,
+	}, nil
 }

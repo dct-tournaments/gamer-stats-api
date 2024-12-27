@@ -16,7 +16,7 @@ const (
 )
 
 type LeagueOfLegendsService interface {
-	GetPlayerStats(
+	GetPlayerStatsByNameAndTagLine(
 		ctx context.Context,
 		region string,
 		name string,

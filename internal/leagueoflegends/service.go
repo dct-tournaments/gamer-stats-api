@@ -43,7 +43,7 @@ type service struct {
 }
 
 type Service interface {
-	GetPlayerStats(
+	GetPlayerStatsByNameAndTagLine(
 		ctx context.Context,
 		region string,
 		name string,
@@ -85,7 +85,7 @@ func (s *service) getPlayerPUUIDByRiotID(
 	return account.Puuid, nil
 }
 
-func (s *service) GetPlayerStats(
+func (s *service) GetPlayerStatsByNameAndTagLine(
 	ctx context.Context,
 	region string,
 	name string,
@@ -111,40 +111,10 @@ func (s *service) GetPlayerStats(
 		return nil, errors.Wrap(err, "failed to get player matches by PUUID")
 	}
 
-	playerKillsCount := 0
-	playerDeathCount := 0
-	playerAssistCount := 0
-	playerWardsPlacedCount := 0
-
-	for _, id := range matchIDs {
-		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, leagueoflegends.PlatformRouting(region), id)
-		if err != nil {
-			return nil, errors.Wrap(err, "failed to get match by ID")
-		}
-
-		if queueType != nil && match.Info.QueueID != *queueType {
-			continue
-		}
-
-		for _, player := range match.Info.Participants {
-			if strings.EqualFold(player.PUUID, puuid) {
-				playerKillsCount += player.Kills
-				playerDeathCount += player.Deaths
-				playerAssistCount += player.Assists
-				playerWardsPlacedCount += player.WardsPlaced
-			}
-		}
-	}
-
-	return &PlayerStats{
-		KillCount:   playerKillsCount,
-		DeathCount:  playerDeathCount,
-		AssistCount: playerAssistCount,
-		WardsPlaced: playerWardsPlacedCount,
-	}, nil
+	return s.getPlayerStats(ctx, matchIDs, leagueoflegends.PlatformRouting(region), queueType, puuid)
 }
 
-func (s *service) GetPlayerStatsByPUUID(
+func (s service) GetPlayerStatsByPUUID(
 	ctx context.Context,
 	region string,
 	puuid string,
@@ -164,13 +134,23 @@ func (s *service) GetPlayerStatsByPUUID(
 		return nil, errors.Wrap(err, "failed to get player matches by PUUID")
 	}
 
+	return s.getPlayerStats(ctx, matchIDs, leagueoflegends.PlatformRouting(region), queueType, puuid)
+}
+
+func (s service) getPlayerStats(
+	ctx context.Context,
+	matchIDs []string,
+	region leagueoflegends.PlatformRouting,
+	queueType *leagueoflegends.QueueID,
+	puuid string,
+) (*PlayerStats, error) {
 	playerKillsCount := 0
 	playerDeathCount := 0
 	playerAssistCount := 0
 	playerWardsPlacedCount := 0
 
 	for _, id := range matchIDs {
-		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, leagueoflegends.PlatformRouting(region), id)
+		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, region, id)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get match by ID")
 		}

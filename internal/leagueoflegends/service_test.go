@@ -82,7 +82,7 @@ func Test_GetPlayerStats_RankedQueue(t *testing.T) {
 
 	rankedGames := plol.RankedQueueID
 
-	stats, err := service.GetPlayerStats(ctx, region, playerName, tagLine, nil, &rankedGames)
+	stats, err := service.GetPlayerStatsByNameAndTagLine(ctx, region, playerName, tagLine, nil, &rankedGames)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 10, stats.KillCount)

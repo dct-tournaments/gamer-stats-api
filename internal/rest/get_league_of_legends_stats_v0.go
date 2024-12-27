@@ -73,7 +73,7 @@ func (h *handler) GetLeagueOfLegendsStats(c *gin.Context) {
 
 	queueID := toQueueTypeParamToQueueID(QueueType(queueTypeStr))
 
-	stats, err := h.leagueOfLegendsService.GetPlayerStats(
+	stats, err := h.leagueOfLegendsService.GetPlayerStatsByNameAndTagLine(
 		c.Request.Context(),
 		region,
 		username,

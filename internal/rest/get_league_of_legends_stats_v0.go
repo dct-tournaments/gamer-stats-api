@@ -22,6 +22,7 @@ type Stats struct {
 	Deaths      int `json:"deaths"`
 	Assists     int `json:"assists"`
 	WardsPlaced int `json:"wards_placed"`
+	Wins        int `json:"wins"`
 }
 
 type GetLeagueOfLegendsStatsResponse struct {
@@ -93,6 +94,7 @@ func (h *handler) GetLeagueOfLegendsStats(c *gin.Context) {
 			Deaths:      stats.DeathCount,
 			Assists:     stats.AssistCount,
 			WardsPlaced: stats.WardsPlaced,
+			Wins:        stats.Wins,
 		},
 		QueryExecutedAt: time.Now().Unix(),
 	}

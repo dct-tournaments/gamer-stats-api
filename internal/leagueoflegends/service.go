@@ -148,6 +148,7 @@ func (s service) getPlayerStats(
 	playerDeathCount := 0
 	playerAssistCount := 0
 	playerWardsPlacedCount := 0
+	playesWinsCount := 0
 
 	for _, id := range matchIDs {
 		match, err := s.leagueOfLegendsAPIService.GetMatchByID(ctx, region, id)
@@ -165,6 +166,9 @@ func (s service) getPlayerStats(
 				playerDeathCount += player.Deaths
 				playerAssistCount += player.Assists
 				playerWardsPlacedCount += player.WardsPlaced
+				if player.Win {
+					playesWinsCount += 1
+				}
 			}
 		}
 	}
@@ -174,5 +178,6 @@ func (s service) getPlayerStats(
 		DeathCount:  playerDeathCount,
 		AssistCount: playerAssistCount,
 		WardsPlaced: playerWardsPlacedCount,
+		Wins:        playesWinsCount,
 	}, nil
 }

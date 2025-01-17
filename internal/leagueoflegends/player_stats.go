@@ -5,4 +5,5 @@ type PlayerStats struct {
 	DeathCount  int
 	AssistCount int
 	WardsPlaced int
+	Wins        int
 }

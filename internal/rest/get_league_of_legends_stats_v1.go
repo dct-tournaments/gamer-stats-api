@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/dct-tournaments/gamer-stats-api/pkg/pointer"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,6 +19,7 @@ import (
 // @Param        start_time	query   string  false "start time epoch format"
 // @Param        region		query   string  true  "league of legends region: br1,eun1,euw1,jp1,kr,la1,la2,na1,oc1,ph2,ru,sg2,th2,tr1,tw2,vn2"
 // @Param        queue_type	query   string  true  "queue type: all,ranked"
+// @Param        champion_name	query   string  false  "champion name: Ambessa, Aurora..."
 // @Success      200  {object}     GetLeagueOfLegendsStatsResponse
 // @Failure      400
 // @Failure      500
@@ -27,6 +29,7 @@ func (h *handler) GetLeagueOfLegendsStatsV1(c *gin.Context) {
 	region := c.Query("region")
 	startTimeStr := c.Query("start_time")
 	queueTypeStr := c.Query("queue_type")
+	championName := c.Query("champion_name")
 
 	if puuid == "" || queueTypeStr == "" || region == "" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
@@ -56,6 +59,7 @@ func (h *handler) GetLeagueOfLegendsStatsV1(c *gin.Context) {
 		puuid,
 		startTimePtr,
 		queueID,
+		pointer.FromString(championName),
 	)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

@@ -23,7 +23,7 @@ func Test_GetPlayerStats_RankedQueue(t *testing.T) {
 	playerName := "player"
 	playerPuuid := "123"
 	tagLine := "euw"
-	region := "EUW1"
+	region := "euw1"
 
 	expectedRiotAccount := &plol.RiotAccount{Puuid: playerPuuid, GameName: playerName, TagLine: tagLine}
 
@@ -44,10 +44,11 @@ func Test_GetPlayerStats_RankedQueue(t *testing.T) {
 		Info: plol.Info{
 			Participants: []plol.Participants{
 				{
-					PUUID:   playerPuuid,
-					Kills:   10,
-					Deaths:  0,
-					Assists: 5,
+					PUUID:        playerPuuid,
+					Kills:        10,
+					Deaths:       0,
+					Assists:      5,
+					ChampionName: plol.Aatrox,
 				},
 			},
 			QueueID: plol.RankedQueueID,
@@ -58,10 +59,11 @@ func Test_GetPlayerStats_RankedQueue(t *testing.T) {
 		Info: plol.Info{
 			Participants: []plol.Participants{
 				{
-					PUUID:   playerPuuid,
-					Kills:   20,
-					Deaths:  3,
-					Assists: 7,
+					PUUID:        playerPuuid,
+					Kills:        20,
+					Deaths:       3,
+					Assists:      7,
+					ChampionName: plol.Aatrox,
 				},
 			},
 			QueueID: plol.FlexQueueID,
@@ -82,7 +84,97 @@ func Test_GetPlayerStats_RankedQueue(t *testing.T) {
 
 	rankedGames := plol.RankedQueueID
 
-	stats, err := service.GetPlayerStatsByNameAndTagLine(ctx, region, playerName, tagLine, nil, &rankedGames)
+	stats, err := service.GetPlayerStatsByNameAndTagLine(ctx, region, playerName, tagLine, nil, &rankedGames, nil)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 10, stats.KillCount)
+	assert.Equal(t, 0, stats.DeathCount)
+	assert.Equal(t, 5, stats.AssistCount)
+}
+
+func Test_GetPlayerStats_RankedQueueAndChampionFilter(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish() // will assert if all methods expeted to be called, were called
+
+	mockLeagueOfLegendsAPIService := mocks.NewMockLeagueOfLegendsAPIService(ctrl)
+
+	ctx := context.Background()
+
+	// mock get account by riot id
+	playerName := "player"
+	playerPuuid := "123"
+	tagLine := "euw"
+	region := "euw1"
+	championName := plol.Aatrox
+
+	expectedRiotAccount := &plol.RiotAccount{Puuid: playerPuuid, GameName: playerName, TagLine: tagLine}
+
+	mockLeagueOfLegendsAPIService.EXPECT().
+		GetAccountByRiotID(ctx, playerName, tagLine, plol.PlatformRouting(region)).
+		Return(expectedRiotAccount, nil).
+		Times(1)
+
+	// mock get matches by puuid
+	expectedMatchesID := []string{"match1", "match2"}
+	mockLeagueOfLegendsAPIService.EXPECT().
+		GetMatchesByPUUID(ctx, plol.EUW1PlatformRouting, expectedRiotAccount.Puuid, nil, nil, nil, nil).
+		Return(expectedMatchesID, nil).
+		Times(1)
+
+	// mock get match by id
+	expectedMatch1 := &plol.Match{
+		Info: plol.Info{
+			Participants: []plol.Participants{
+				{
+					PUUID:        playerPuuid,
+					Kills:        10,
+					Deaths:       0,
+					Assists:      5,
+					ChampionName: "Aatrox",
+				},
+			},
+			QueueID: plol.RankedQueueID,
+		},
+	}
+
+	expectedMatch2 := &plol.Match{
+		Info: plol.Info{
+			Participants: []plol.Participants{
+				{
+					PUUID:        playerPuuid,
+					Kills:        20,
+					Deaths:       3,
+					Assists:      7,
+					ChampionName: "Aatrox",
+				},
+			},
+			QueueID: plol.FlexQueueID,
+		},
+	}
+
+	mockLeagueOfLegendsAPIService.EXPECT().
+		GetMatchByID(ctx, plol.EUW1PlatformRouting, expectedMatchesID[0]).
+		Return(expectedMatch1, nil).
+		Times(1)
+
+	mockLeagueOfLegendsAPIService.EXPECT().
+		GetMatchByID(ctx, plol.EUW1PlatformRouting, expectedMatchesID[1]).
+		Return(expectedMatch2, nil).
+		Times(1)
+
+	service := leagueoflegends.NewService(mockLeagueOfLegendsAPIService)
+
+	rankedGames := plol.RankedQueueID
+
+	stats, err := service.GetPlayerStatsByNameAndTagLine(
+		ctx,
+		region,
+		playerName,
+		tagLine,
+		nil,
+		&rankedGames,
+		(*string)(&championName),
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 10, stats.KillCount)

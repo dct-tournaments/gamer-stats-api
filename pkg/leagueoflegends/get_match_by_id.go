@@ -28,12 +28,13 @@ type Info struct {
 }
 
 type Participants struct {
-	Kills       int    `json:"kills"`
-	Deaths      int    `json:"deaths"`
-	Assists     int    `json:"assists"`
-	PUUID       string `json:"puuid"`
-	WardsPlaced int    `json:"wardsPlaced"`
-	Win         bool   `json:"win"`
+	Kills        int          `json:"kills"`
+	Deaths       int          `json:"deaths"`
+	Assists      int          `json:"assists"`
+	PUUID        string       `json:"puuid"`
+	WardsPlaced  int          `json:"wardsPlaced"`
+	Win          bool         `json:"win"`
+	ChampionName ChampionName `json:"championName"`
 }
 
 func (s service) GetMatchByID(ctx context.Context, platformRouting PlatformRouting, matchID string) (*Match, error) {

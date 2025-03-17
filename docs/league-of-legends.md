@@ -12,10 +12,11 @@ Provide the stats for a league of legends player.
 - `region` - The region of the player. Valid values are br1,eun1,euw1,jp1,kr,la1,la2,na1,oc1,ph2,ru,sg2,th2,tr1,tw2,vn2
 - `start_time` - Epoch timestamp in seconds. The matchlist started storing timestamps on June 16th, 2021. Any matches played before June 16th, 2021 won't be included in the results if the startTime filter is set.
 - `queue_type` - The queue type of the matches. Valid values are all and ranked.
+- `champion_name` - The name of the champion. Eg: Aatrox, Ahri, XinZhao
 
 #### Request
 ```
-curl -X GET "http://localhost:8080/stats-api/v0/league-of-legends?username=kahnoel&tagline=euw&region=euw1&start_time=1715959426&queue_type=all"
+curl -X GET "http://localhost:8080/stats-api/v0/league-of-legends?username=kahnoel&tagline=euw&region=euw1&start_time=1715959426&queue_type=all&champion_name=XinZhao"
 ```
 
 #### Response
@@ -39,10 +40,11 @@ curl -X GET "http://localhost:8080/stats-api/v0/league-of-legends?username=kahno
 - `region` - The region of the player. Valid values are br1,eun1,euw1,jp1,kr,la1,la2,na1,oc1,ph2,ru,sg2,th2,tr1,tw2,vn2
 - `start_time` - Epoch timestamp in seconds. The matchlist started storing timestamps on June 16th, 2021. Any matches played before June 16th, 2021 won't be included in the results if the startTime filter is set.
 - `queue_type` - The queue type of the matches. Valid values are all and ranked.
+- `champion_name` - The name of the champion. Eg: Aatrox, Ahri, XinZhao
 
 #### Request
 ```
-curl -X GET "http://localhost:8080/stats-api/v1/league-of-legends?puuid=X_29m1VX_LBey0jHvsxMtdt82G31wuY8RwIvMDdOhUFccfNo_NM6f1KWclRygXEmaewYA7EsuTFvZA&region=br1&start_time=1733587943&queue_type=ranked"
+curl -X GET "http://localhost:8080/stats-api/v1/league-of-legends?puuid=X_29m1VX_LBey0jHvsxMtdt82G31wuY8RwIvMDdOhUFccfNo_NM6f1KWclRygXEmaewYA7EsuTFvZA&region=br1&start_time=1733587943&queue_type=ranked&champion_name=XinZhao"
 ```
 
 #### Response

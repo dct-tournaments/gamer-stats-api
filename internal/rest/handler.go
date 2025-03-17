@@ -23,6 +23,7 @@ type LeagueOfLegendsService interface {
 		tagLine string,
 		startAt *int64,
 		queueType *pleagueoflegends.QueueID,
+		championName *string,
 	) (*leagueoflegends.PlayerStats, error)
 	GetPlayerStatsByPUUID(
 		ctx context.Context,
@@ -30,6 +31,7 @@ type LeagueOfLegendsService interface {
 		puuid string,
 		startAt *int64,
 		queueType *pleagueoflegends.QueueID,
+		championName *string,
 	) (*leagueoflegends.PlayerStats, error)
 }
 

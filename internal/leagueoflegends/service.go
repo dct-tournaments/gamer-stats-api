@@ -50,6 +50,7 @@ type Service interface {
 		tagLine string,
 		startAt *int64,
 		queueType *leagueoflegends.QueueID,
+		championName *string,
 	) (*PlayerStats, error)
 	GetPlayerStatsByPUUID(
 		ctx context.Context,
@@ -57,6 +58,7 @@ type Service interface {
 		puuid string,
 		startAt *int64,
 		queueType *leagueoflegends.QueueID,
+		championName *string,
 	) (*PlayerStats, error)
 }
 
@@ -92,6 +94,7 @@ func (s *service) GetPlayerStatsByNameAndTagLine(
 	tagLine string,
 	startAt *int64,
 	queueType *leagueoflegends.QueueID,
+	championName *string,
 ) (*PlayerStats, error) {
 	puuid, err := s.getPlayerPUUIDByRiotID(ctx, name, tagLine, region)
 	if err != nil {
@@ -111,7 +114,7 @@ func (s *service) GetPlayerStatsByNameAndTagLine(
 		return nil, errors.Wrap(err, "failed to get player matches by PUUID")
 	}
 
-	return s.getPlayerStats(ctx, matchIDs, leagueoflegends.PlatformRouting(region), queueType, puuid)
+	return s.getPlayerStats(ctx, matchIDs, leagueoflegends.PlatformRouting(region), queueType, puuid, championName)
 }
 
 func (s service) GetPlayerStatsByPUUID(
@@ -120,6 +123,7 @@ func (s service) GetPlayerStatsByPUUID(
 	puuid string,
 	startAt *int64,
 	queueType *leagueoflegends.QueueID,
+	championName *string,
 ) (*PlayerStats, error) {
 	matchIDs, err := s.leagueOfLegendsAPIService.GetMatchesByPUUID(
 		ctx,
@@ -134,7 +138,7 @@ func (s service) GetPlayerStatsByPUUID(
 		return nil, errors.Wrap(err, "failed to get player matches by PUUID")
 	}
 
-	return s.getPlayerStats(ctx, matchIDs, leagueoflegends.PlatformRouting(region), queueType, puuid)
+	return s.getPlayerStats(ctx, matchIDs, leagueoflegends.PlatformRouting(region), queueType, puuid, championName)
 }
 
 func (s service) getPlayerStats(
@@ -143,6 +147,7 @@ func (s service) getPlayerStats(
 	region leagueoflegends.PlatformRouting,
 	queueType *leagueoflegends.QueueID,
 	puuid string,
+	championName *string,
 ) (*PlayerStats, error) {
 	playerKillsCount := 0
 	playerDeathCount := 0
@@ -161,15 +166,22 @@ func (s service) getPlayerStats(
 		}
 
 		for _, player := range match.Info.Participants {
-			if strings.EqualFold(player.PUUID, puuid) {
-				playerKillsCount += player.Kills
-				playerDeathCount += player.Deaths
-				playerAssistCount += player.Assists
-				playerWardsPlacedCount += player.WardsPlaced
-				if player.Win {
-					playesWinsCount += 1
-				}
+			if !strings.EqualFold(player.PUUID, puuid) {
+				continue
 			}
+
+			if championName != nil && !strings.EqualFold(*championName, string(player.ChampionName)) {
+				continue
+			}
+
+			playerKillsCount += player.Kills
+			playerDeathCount += player.Deaths
+			playerAssistCount += player.Assists
+			playerWardsPlacedCount += player.WardsPlaced
+			if player.Win {
+				playesWinsCount += 1
+			}
+
 		}
 	}
 

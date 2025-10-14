@@ -35,7 +35,7 @@ func Test_GetPlayerStats_RankedQueue(t *testing.T) {
 	// mock get matches by puuid
 	expectedMatchesID := []string{"match1", "match2"}
 	mockLeagueOfLegendsAPIService.EXPECT().
-		GetMatchesByPUUID(ctx, plol.EUW1PlatformRouting, expectedRiotAccount.Puuid, nil, nil, nil, nil).
+		GetMatchesByPUUID(ctx, plol.EUW1PlatformRouting, expectedRiotAccount.Puuid, nil, nil, nil, nil, nil).
 		Return(expectedMatchesID, nil).
 		Times(1)
 
@@ -117,7 +117,7 @@ func Test_GetPlayerStats_RankedQueueAndChampionFilter(t *testing.T) {
 	// mock get matches by puuid
 	expectedMatchesID := []string{"match1", "match2"}
 	mockLeagueOfLegendsAPIService.EXPECT().
-		GetMatchesByPUUID(ctx, plol.EUW1PlatformRouting, expectedRiotAccount.Puuid, nil, nil, nil, nil).
+		GetMatchesByPUUID(ctx, plol.EUW1PlatformRouting, expectedRiotAccount.Puuid, nil, nil, nil, nil, nil).
 		Return(expectedMatchesID, nil).
 		Times(1)
 

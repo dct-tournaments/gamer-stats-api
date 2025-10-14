@@ -24,6 +24,7 @@ type LeagueOfLegendsAPIService interface {
 		endTime *int64,
 		start *int,
 		count *int,
+		queueID *leagueoflegends.QueueID,
 	) ([]string, error)
 	GetMatchByID(
 		ctx context.Context,
@@ -109,6 +110,7 @@ func (s *service) GetPlayerStatsByNameAndTagLine(
 		nil,
 		nil,
 		nil,
+		nil,
 	)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get player matches by PUUID")
@@ -130,6 +132,7 @@ func (s service) GetPlayerStatsByPUUID(
 		leagueoflegends.PlatformRouting(region),
 		puuid,
 		startAt,
+		nil,
 		nil,
 		nil,
 		nil,

@@ -22,6 +22,7 @@ func (s service) GetMatchesByPUUID(
 	endTime *int64,
 	start *int,
 	count *int,
+	queueID *QueueID,
 ) ([]string, error) {
 	region := s.fromPlatformRoutingToRegionalRouting(platformRouting)
 
@@ -54,6 +55,11 @@ func (s service) GetMatchesByPUUID(
 	if count != nil && *count > 0 {
 		strCount := strconv.Itoa(*count)
 		query.Add("count", strCount)
+	}
+
+	if queueID != nil {
+		strQueueID := strconv.Itoa(int(*queueID))
+		query.Add("queue", strQueueID)
 	}
 
 	req.URL.RawQuery = query.Encode()

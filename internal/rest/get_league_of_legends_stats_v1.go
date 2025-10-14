@@ -18,7 +18,7 @@ import (
 // @query        puuid	query   string  true  "league of legends player puuid"
 // @Param        start_time	query   string  false "start time epoch format"
 // @Param        region		query   string  true  "league of legends region: br1,eun1,euw1,jp1,kr,la1,la2,na1,oc1,ph2,ru,sg2,th2,tr1,tw2,vn2"
-// @Param        queue_type	query   string  true  "queue type: all,ranked"
+// @Param        queue_type	query   string  true  "queue type: all,ranked,aram,swiftplay"
 // @Param        champion_name	query   string  false  "champion name: Ambessa, Aurora..."
 // @Success      200  {object}     GetLeagueOfLegendsStatsResponse
 // @Failure      400

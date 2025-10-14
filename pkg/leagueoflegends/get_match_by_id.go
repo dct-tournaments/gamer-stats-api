@@ -16,6 +16,7 @@ const (
 	RankedQueueID    QueueID = 420
 	FlexQueueID      QueueID = 440
 	AramQueueID      QueueID = 450
+	SwiftplayQueueID QueueID = 480
 )
 
 type Match struct {

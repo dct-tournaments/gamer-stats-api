@@ -13,9 +13,10 @@ import (
 type QueueType string
 
 const (
-	RankedQueueType QueueType = "ranked"
-	AllQueueType    QueueType = "all"
-	AramQueueType   QueueType = "aram"
+	RankedQueueType    QueueType = "ranked"
+	AllQueueType       QueueType = "all"
+	AramQueueType      QueueType = "aram"
+	SwiftplayQueueType QueueType = "swiftplay"
 )
 
 type Stats struct {
@@ -41,7 +42,7 @@ type GetLeagueOfLegendsStatsResponse struct {
 // @query		 tagline	query   string  true "league of legends tagline"
 // @Param        start_time	query   string  false "start time epoch format"
 // @Param        region		query   string  true  "league of legends region: br1,eun1,euw1,jp1,kr,la1,la2,na1,oc1,ph2,ru,sg2,th2,tr1,tw2,vn2"
-// @Param        queue_type	query   string  true  "queue type: all,ranked"
+// @Param        queue_type	query   string  true  "queue type: all,ranked,aram,swiftplay"
 // @Param        champion_name	query   string  false  "champion name: Ambessa, Aurora..."
 // @Success      200  {object}     GetLeagueOfLegendsStatsResponse
 // @Failure      400
@@ -110,12 +111,13 @@ func toQueueTypeParamToQueueID(queueType QueueType) *leagueoflegends.QueueID {
 	switch queueType {
 	case RankedQueueType:
 		rankedQueueID := leagueoflegends.RankedQueueID
-
 		return &rankedQueueID
 	case AramQueueType:
 		aramQueueID := leagueoflegends.AramQueueID
-
 		return &aramQueueID
+	case SwiftplayQueueType:
+		swiftplayQueueID := leagueoflegends.SwiftplayQueueID
+		return &swiftplayQueueID
 	case AllQueueType:
 		fallthrough
 	default:
